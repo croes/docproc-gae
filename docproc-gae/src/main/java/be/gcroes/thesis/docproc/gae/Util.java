@@ -21,16 +21,20 @@ public class Util {
 	private static DatastoreService datastore = DatastoreServiceFactory
 			.getDatastoreService();
 
-	public static void createOrUpdate(Entity e) {
+	public static Key createOrUpdate(Entity e) {
 		logger.info("Saving entity");
 		Transaction txn = datastore.beginTransaction();
+		Key key = null;
 		try {
-			datastore.put(e);
+			key = datastore.put(e);
+			txn.commit();
 		} finally {
 			if (txn.isActive()) {
+				logger.info("rolling back save");
 				txn.rollback();
 			}
 		}
+		return key;
 	}
 
 	public static Entity findEntity(Key key) {

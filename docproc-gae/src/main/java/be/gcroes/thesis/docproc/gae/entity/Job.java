@@ -17,20 +17,24 @@ public class Job{
 	
 	private static final Logger logger = Logger.getLogger(Job.class.getCanonicalName());
 	
-	public static void createOrUpdateJob(String id,
+	public static Key createOrUpdateJob(String id,
 										 Date startTime,
 										 Date endTime,
 										 String template,
 										 String csv){
 		Entity job = Job.getJob(id);
 		if(job == null){
-			job = new Entity("job", id);
-			job.setProperty("startTime", startTime);
-			job.setProperty("endTime", endTime);
-			job.setProperty("template", template);
-			job.setProperty("csv", csv);
+			job = new Entity("Job", id);
 		}
-		Util.createOrUpdate(job);
+		job.setProperty("startTime", startTime);
+		job.setProperty("endTime", endTime);
+		job.setProperty("template", template);
+		job.setProperty("csv", csv);
+		return Util.createOrUpdate(job);
+	}
+	
+	public static Key createOrUpdateJob(Entity updatedJob){
+		return Util.createOrUpdate(updatedJob);
 	}
 
 	public static Entity getJob(String id) {
