@@ -1,6 +1,6 @@
 <queue-entries>
 	<queue>
-		<name>CsvToDataQueue</name>
+		<name>csvtodata-queue</name>
 		<rate>1/s</rate>
 		<max-concurrent-requests>1</max-concurrent-requests>
 		<bucket-size>2</bucket-size> 
