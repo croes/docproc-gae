@@ -18,8 +18,6 @@ import au.com.bytecode.opencsv.CSVReader;
 import be.gcroes.thesis.docproc.gae.entity.Job;
 import be.gcroes.thesis.docproc.gae.entity.Task;
 
-import com.google.appengine.api.users.User;
-
 
 public class CsvToDataServlet extends HttpServlet{
 
@@ -37,7 +35,8 @@ public class CsvToDataServlet extends HttpServlet{
 		  throws ServletException, IOException {
 		String template = req.getParameter("template");
 		String csv = req.getParameter("csv");
-		User user = new User("test@test.com", "test.com");
+		String user = req.getParameter("user");
+		logger.info("User: " + user);
 		Job job = new Job(user, template, csv, new Date(), null);
 		ofy().save().entity(job).now();
 		
@@ -53,7 +52,9 @@ public class CsvToDataServlet extends HttpServlet{
 			}
 			tasks.add(task);
 		}
+		reader.close();
 		logger.info("Saved job with " + tasks.size() + " tasks");
+		logger.info("ARE YOU EVEN PRINTING THIS???");
 		ofy().save().entities(tasks).now();
 	}
 	

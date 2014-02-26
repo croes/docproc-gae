@@ -70,7 +70,8 @@ public class EntityTest {
 	@Test
 	public void testObjectify(){
 		Job job1 = new Job();
-		job1.setOwner(new User("testuser@test.com", "test.com"));
+		User user = new User("testuser@test.com", "test.com");
+		job1.setUser(user.getUserId());
 		job1.setCsv("c;s;v;");
 		job1.setTemplate("\\template");
 		ofy().save().entity(job1).now();

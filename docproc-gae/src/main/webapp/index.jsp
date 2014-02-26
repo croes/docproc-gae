@@ -1,3 +1,9 @@
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.List" %>
+<%@ page import="com.google.appengine.api.users.User" %>
+<%@ page import="com.google.appengine.api.users.UserService" %>
+<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <html>
 <head>
 <meta charset="ISO-8859-1" />
@@ -8,6 +14,15 @@
 <script src="${pageContext.request.contextPath}/js/bootstrap.js"></script>
 </head>
 <body style="padding-top: 50px;">
+	<%
+    UserService userService = UserServiceFactory.getUserService();
+    User user = userService.getCurrentUser();
+    if (user != null) {
+      pageContext.setAttribute("user", user);
+    } else {
+    	response.sendRedirect(userService.createLoginURL(request.getRequestURI()));
+    }
+	%>
 	<nav class="navbar navbar-default navbar-fixed-top navbar-inverse"
 		role="navigation">
 	<div class="container">
@@ -28,10 +43,10 @@
 				<li><a href="${pageContext.request.contextPath}/history.jsp">History</a></li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li><a href="${pageContext.request.contextPath}/logout.jsp">Logout</a></li>
+				<li><a href="<%userService.createLogoutURL(request.getRequestURI()); %>">Logout</a></li>
 			</ul>
 			<p class="navbar-text navbar-right">
-				<span class="glyphicon glyphicon-user"></span><%=session.getAttribute("user")%>
+				<span class="glyphicon glyphicon-user"></span>${fn:escapeXml(user.nickname)}
 			</p>
 		</div>
 	</div>
