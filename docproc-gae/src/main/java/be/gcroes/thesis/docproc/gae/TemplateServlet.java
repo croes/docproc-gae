@@ -2,6 +2,7 @@ package be.gcroes.thesis.docproc.gae;
 
 
 import static be.gcroes.thesis.docproc.gae.entity.OfyService.ofy;
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.io.IOException;
 import java.io.StringWriter;
@@ -15,14 +16,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
-import org.apache.velocity.app.VelocityEngine;
-
-
-
 
 import be.gcroes.thesis.docproc.gae.entity.Job;
 import be.gcroes.thesis.docproc.gae.entity.Task;
 
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.googlecode.objectify.Key;
 
 public class TemplateServlet extends HttpServlet {
@@ -72,7 +71,11 @@ public class TemplateServlet extends HttpServlet {
         	logger.info("Could not process template for task " + task.getId());
         }
         
-        //TODO call next worker
+        logger.info("Placing task " + taskId + " in render queue");
+		Queue queue = QueueFactory.getQueue("render-queue");
+		queue.add(withUrl("/render")
+					.param("jobId", "" + job.getId())
+					.param("taskId", "" + task.getId()));
 		
 	}
 

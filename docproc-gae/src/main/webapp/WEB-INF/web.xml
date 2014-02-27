@@ -43,5 +43,15 @@
 		<url-pattern>/template</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>RenderServlet</servlet-name>
+		<servlet-class>be.gcroes.thesis.docproc.gae.RenderServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>RenderServlet</servlet-name>
+		<url-pattern>/render</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>
