@@ -53,5 +53,15 @@
 		<url-pattern>/render</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>MailServlet</servlet-name>
+		<servlet-class>be.gcroes.thesis.docproc.gae.MailServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>MailServlet</servlet-name>
+		<url-pattern>/mail</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>

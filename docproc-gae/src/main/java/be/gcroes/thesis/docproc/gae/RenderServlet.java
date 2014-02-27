@@ -1,6 +1,7 @@
 package be.gcroes.thesis.docproc.gae;
 
 import static be.gcroes.thesis.docproc.gae.entity.OfyService.ofy;
+import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -13,6 +14,18 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+//import org.w3c.dom.Document;
+//import org.xhtmlrenderer.pdf.ITextRenderer;
+//import org.xhtmlrenderer.resource.XMLResource;
+
+
+
+
+import be.gcroes.thesis.docproc.gae.entity.Job;
+import be.gcroes.thesis.docproc.gae.entity.Task;
+
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.tools.cloudstorage.GcsFileOptions;
 import com.google.appengine.tools.cloudstorage.GcsFilename;
 import com.google.appengine.tools.cloudstorage.GcsOutputChannel;
@@ -24,14 +37,17 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+
+//import com.itextpdf.text.Document;
+//import com.itextpdf.text.DocumentException;
+//import com.itextpdf.text.pdf.PdfWriter;
+//import com.itextpdf.tool.xml.XMLWorkerHelper;
 //import org.apache.fop.apps.FOPException;
 //import org.apache.fop.apps.FOUserAgent;
 //import org.apache.fop.apps.Fop;
 //import org.apache.fop.apps.FopFactory;
 //import org.apache.xmlgraphics.util.MimeConstants;
 //import org.apache.xmlgraphics.util.uri.CommonURIResolver;
-import be.gcroes.thesis.docproc.gae.entity.Job;
-import be.gcroes.thesis.docproc.gae.entity.Task;
 
 public class RenderServlet extends HttpServlet {
 
@@ -44,7 +60,7 @@ public class RenderServlet extends HttpServlet {
 			.createGcsService(RetryParams.getDefaultInstance());
 
 	private static final Logger logger = Logger
-			.getLogger(CsvToDataServlet.class.getCanonicalName());
+			.getLogger(RenderServlet.class.getCanonicalName());
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -58,22 +74,40 @@ public class RenderServlet extends HttpServlet {
 		GcsOutputChannel outputChannel = gcsService.createOrReplace(
 				new GcsFilename("docproc-test.appspot.com", "docproc-" + taskId
 						+ ".pdf"), GcsFileOptions.getDefaultInstance());
-
 		try {
-			Document document = new Document();
-			ByteArrayOutputStream boas = new ByteArrayOutputStream();
-			PdfWriter writer = PdfWriter.getInstance(document, boas);
-			document.open();
-			XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-					new ByteArrayInputStream(currentTemplate.getBytes()));
-			document.close();
+//			ByteArrayOutputStream boas = new ByteArrayOutputStream();
+//			Document document = XMLResource.load(
+//					new ByteArrayInputStream(currentTemplate.getBytes()))
+//					.getDocument();
+//			ITextRenderer renderer = new ITextRenderer();
+//			renderer.setDocument(document, "");
+//			renderer.layout();
+//
+//			renderer.createPDF(boas);
+//
+//			boas.close();
+			// iText version:
+			 Document document = new Document();
+			 ByteArrayOutputStream boas = new ByteArrayOutputStream();
+			 PdfWriter writer = PdfWriter.getInstance(document, boas);
+			 document.open();
+			 XMLWorkerHelper.getInstance().parseXHtml(writer, document,
+			 new ByteArrayInputStream(currentTemplate.getBytes()));
+			 document.close();
 
 			outputChannel.write(ByteBuffer.wrap(boas.toByteArray()));
 			task.setResult(outputChannel.getFilename().getObjectName());
 			outputChannel.close();
 			ofy().save().entity(task).now();
 			logger.info("Rendered XSL for task " + taskId);
-		} catch (IOException | DocumentException e) {
+			
+			logger.info("Placing task " + taskId + " in mail queue");
+			Queue queue = QueueFactory.getQueue("mail-queue");
+			queue.add(withUrl("/mail")
+						.param("jobId", "" + jobId)
+						.param("taskId", "" + task.getId()));
+
+		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
 

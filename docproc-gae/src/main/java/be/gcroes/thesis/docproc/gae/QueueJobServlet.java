@@ -22,7 +22,6 @@ public class QueueJobServlet extends HttpServlet{
 	 */
 	private static final long serialVersionUID = 24593714312220073L;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			  throws ServletException, IOException {
