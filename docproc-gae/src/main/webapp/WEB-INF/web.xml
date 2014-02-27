@@ -13,6 +13,17 @@
 	</filter-mapping>
 	
 	<servlet>
+		<servlet-name>QueueJobServlet</servlet-name>
+		<servlet-class>be.gcroes.thesis.docproc.gae.QueueJobServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>QueueJobServlet</servlet-name>
+		<url-pattern>/queuejob</url-pattern>
+	</servlet-mapping>
+	
+	<!-- Worker servlets -->
+	<servlet>
 		<servlet-name>CsvToDataServlet</servlet-name>
 		<servlet-class>be.gcroes.thesis.docproc.gae.CsvToDataServlet</servlet-class>
 	</servlet>
@@ -23,12 +34,14 @@
 	</servlet-mapping>
 	
 	<servlet>
-		<servlet-name>QueueJobServlet</servlet-name>
-		<servlet-class>be.gcroes.thesis.docproc.gae.QueueJobServlet</servlet-class>
+		<servlet-name>TemplateServlet</servlet-name>
+		<servlet-class>be.gcroes.thesis.docproc.gae.TemplateServlet</servlet-class>
 	</servlet>
 	
 	<servlet-mapping>
-		<servlet-name>QueueJobServlet</servlet-name>
-		<url-pattern>/queuejob</url-pattern>
+		<servlet-name>TemplateServlet</servlet-name>
+		<url-pattern>/template</url-pattern>
 	</servlet-mapping>
+	
+	
 </web-app>

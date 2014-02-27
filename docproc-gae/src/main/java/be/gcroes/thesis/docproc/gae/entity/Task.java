@@ -23,26 +23,39 @@ public class Task {
 	@Serialize //cannot be queried, cannot exceed 1 MB
 	HashMap<String, Object> params;
 	
+	String template;
+	
 	String result;
 	
 	public Task(){
 		this.job = null;
 		this.params = new HashMap<String, Object>();
 		this.result = null;
+		this.template = null;
 	}
 	
 	public Task(Job parent){
 		this.job = Ref.create(parent);
 		this.params = new HashMap<String, Object>();
 		this.result = null;
+		this.template = null;
 	}
 	
 	public Task(Job parent, HashMap<String, Object> params){
 		this.job = Ref.create(parent);
 		this.params = params;
 		this.result = null;
+		this.template = null;
 	}
 	
+	public String getTemplate() {
+		return template;
+	}
+
+	public void setTemplate(String template) {
+		this.template = template;
+	}
+
 	public String getResult() {
 		return result;
 	}

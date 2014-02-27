@@ -10,8 +10,8 @@
 	<artifactId>docproc-gae</artifactId>
 
 	<properties>
-		<appengine.app.version>1</appengine.app.version>
-		<appengine.target.version>1.8.9</appengine.target.version>
+		<appengine.app.version>1-0-test</appengine.app.version>
+		<appengine.target.version>1.9.0</appengine.target.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -38,10 +38,17 @@
 			<artifactId>objectify</artifactId>
 			<version>4.0</version>
 		</dependency>
+		
+		<!-- Worker dependencies -->
 		<dependency>
 			<groupId>net.sf.opencsv</groupId>
 			<artifactId>opencsv</artifactId>
 			<version>2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.velocity</groupId>
+			<artifactId>velocity</artifactId>
+			<version>1.7</version>
 		</dependency>
 
 		<!-- Test Dependencies -->

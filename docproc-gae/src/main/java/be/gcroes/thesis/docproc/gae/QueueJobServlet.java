@@ -3,7 +3,6 @@ package be.gcroes.thesis.docproc.gae;
 import static com.google.appengine.api.taskqueue.TaskOptions.Builder.withUrl;
 
 import java.io.IOException;
-import java.util.Enumeration;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -28,17 +27,9 @@ public class QueueJobServlet extends HttpServlet{
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			  throws ServletException, IOException {
 		String template = req.getParameter("template");
-		log("Template: " + template);
-		log("Params:");
-		for( Enumeration<String> e = (Enumeration<String>)req.getParameterNames(); e.hasMoreElements() ;){
-			String param = e.nextElement();
-			log("param " + param + ": " + req.getParameter(param));
-		}
 		String csv = req.getParameter("csv");
-		log("Csv: "+ csv);
 		UserService userService = UserServiceFactory.getUserService();
 		User user = userService.getCurrentUser();
-		log("User: " +  user.getUserId());
 		Queue queue = QueueFactory.getQueue("csvtodata-queue");
 		queue.add(withUrl("/csvtodata")
 				.param("template", template)
