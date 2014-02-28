@@ -50,12 +50,15 @@ public class MailServlet extends HttpServlet{
 		
 		try {
 		    Message msg = new MimeMessage(session);
-		    msg.setFrom(new InternetAddress("no-reply@docproc-test.appspotmail.com", "Docproc"));
+		    msg.setFrom(new InternetAddress("delivery@docproc-test.appspotmail.com", "Docproc"));
+		    String email = (String) task.getParams().get("email");
+		    String name = (String) task.getParams().get("name");
 		    msg.addRecipient(Message.RecipientType.TO,
-		     new InternetAddress((String) task.getParams().get("email"), (String) task.getParams().get("name")));
+		     new InternetAddress(email, name));
 		    msg.setSubject("Docproc document generated");
 		    msg.setText(msgBody);
 		    Transport.send(msg);
+		    logger.info("Sent mail to " + email);
 
 		} catch (AddressException e) {
 		    e.printStackTrace();
