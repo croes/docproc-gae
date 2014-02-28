@@ -35,37 +35,6 @@ public class EntityTest {
 	public void tearDown() {
 		helper.tearDown();
 	}
-
-	@Test
-	public void testCreateOrUpdateLowLevelJob() {
-		DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
-		assertThat(ds.prepare(new Query("Job")).countEntities(withLimit(10))).isZero();
-		Key k1 = LowLevelJob.createOrUpdateJob("job1", null, null, "\\template", "c;s;v");
-		Key k2 = LowLevelJob.createOrUpdateJob("job2", null, null, "template\\", "v;s;c");
-		assertThat(ds.prepare(new Query("Job")).countEntities(withLimit(10))).isEqualTo(2);
-		List<Entity> jobs = ds.prepare(new Query("Job")).asList(withLimit(10));
-		List<Key> jobkeys = new ArrayList<Key>();
-		for(Entity e : jobs){
-			jobkeys.add(e.getKey());
-		}
-		assertThat(jobkeys).contains(k1, k2);
-		String newTemplate = "\\anothertemplate";
-		String newCsv = "s;c;v";
-	    Key newK1 = LowLevelJob.createOrUpdateJob("job1", null, null, newTemplate, newCsv);
-		assertThat(newK1).isEqualTo(k1);
-		List<Entity> newJobs = ds.prepare(new Query("Job")).asList(withLimit(10));
-		assertThat(newJobs).hasSize(2);
-		List<Key> newJobKeys = getKeysOfEntities(newJobs);
-		assertThat(newJobKeys).contains(k1, k2, newK1);
-		try {
-			Entity job1 = ds.get(newK1);
-			assertThat(job1.getProperty("template")).isEqualTo(newTemplate);
-			assertThat(job1.getProperty("csv")).isEqualTo(newCsv);
-		} catch (EntityNotFoundException e1) {
-			assertThat(false).isTrue();
-		}
-		
-	}
 	
 	@Test
 	public void testObjectify(){
