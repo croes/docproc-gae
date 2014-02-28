@@ -63,5 +63,15 @@
 		<url-pattern>/mail</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>ZipServlet</servlet-name>
+		<servlet-class>be.gcroes.thesis.docproc.gae.ZipServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>ZipServlet</servlet-name>
+		<url-pattern>/zip</url-pattern>
+	</servlet-mapping>
+	
 	
 </web-app>

@@ -98,6 +98,7 @@ public class RenderServlet extends HttpServlet {
 			outputChannel.write(ByteBuffer.wrap(boas.toByteArray()));
 			task.setResult(outputChannel.getFilename().getObjectName());
 			outputChannel.close();
+			boas.close();
 			ofy().save().entity(task).now();
 			logger.info("Rendered XSL for task " + taskId);
 			

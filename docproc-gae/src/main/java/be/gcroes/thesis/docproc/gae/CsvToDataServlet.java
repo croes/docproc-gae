@@ -20,6 +20,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 
 import au.com.bytecode.opencsv.CSVReader;
 import be.gcroes.thesis.docproc.gae.entity.Job;
+import be.gcroes.thesis.docproc.gae.entity.Join;
 import be.gcroes.thesis.docproc.gae.entity.Task;
 
 
@@ -59,13 +60,23 @@ public class CsvToDataServlet extends HttpServlet{
 		logger.info("Saved job with " + tasks.size() + " tasks");
 		ofy().save().entities(tasks).now();
 		
+		//create job join
+		List<Long> taskIds = new ArrayList<Long>();
+		for(Task task : tasks){
+			taskIds.add(task.getId());
+		}
+		Join join = new Join(job.getKey(), taskIds);
+		ofy().save().entity(join).now();
+		job.setJoin(join.getKey());
+		ofy().save().entity(job).now();
+		
 		logger.info("Placing " + tasks.size() + " tasks in template queue");
 		for(Task task : tasks){
 			Queue queue = QueueFactory.getQueue("template-queue");
 			queue.add(withUrl("/template")
 					.param("jobId", "" + job.getId())
 					.param("taskId", "" + task.getId()));
-		}
+			}
 		
 	}
 	

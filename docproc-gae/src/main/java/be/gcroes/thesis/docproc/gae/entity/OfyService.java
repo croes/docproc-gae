@@ -8,6 +8,7 @@ public class OfyService {
     static {
         factory().register(Job.class);
         factory().register(Task.class);
+        factory().register(Join.class);
     }
 
     public static Objectify ofy() {

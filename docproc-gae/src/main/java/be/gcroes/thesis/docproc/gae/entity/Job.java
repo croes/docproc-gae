@@ -31,6 +31,8 @@ public class Job {
 	Date endTime;
 
 	String result;
+	
+	Key<Join> join;
 
 	/**
 	 * Empty constructor. All fields will be null.
@@ -55,6 +57,7 @@ public class Job {
 		this.csv = csv;
 		this.startTime = startTime;
 		this.endTime = endTime;
+		this.join = null;
 	}
 
 	public String getResult() {
@@ -142,5 +145,13 @@ public class Job {
 			return new Date().getTime() - getStartTime().getTime();
 		}
 		return getEndTime().getTime() - getEndTime().getTime();
+	}
+	
+	public Key<Join> getJoin(){
+		return join;
+	}
+	
+	public void setJoin(Key<Join> join){
+		this.join = join;
 	}
 }
