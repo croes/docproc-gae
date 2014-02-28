@@ -144,7 +144,7 @@ public class Job {
 		if(getEndTime() == null){
 			return new Date().getTime() - getStartTime().getTime();
 		}
-		return getEndTime().getTime() - getEndTime().getTime();
+		return getEndTime().getTime() - getStartTime().getTime();
 	}
 	
 	public Key<Join> getJoin(){
