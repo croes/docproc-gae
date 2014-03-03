@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import be.gcroes.thesis.docproc.gae.entity.Job;
-import be.gcroes.thesis.docproc.gae.entity.Join;
 import be.gcroes.thesis.docproc.gae.entity.ShardedCounter;
 import be.gcroes.thesis.docproc.gae.entity.Task;
 
@@ -28,7 +27,6 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.apphosting.api.ApiProxy.OverQuotaException;
 import com.googlecode.objectify.Key;
-import com.googlecode.objectify.Work;
 
 public class MailServlet extends HttpServlet {
 

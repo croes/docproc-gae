@@ -14,14 +14,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-//import org.w3c.dom.Document;
-//import org.xhtmlrenderer.pdf.ITextRenderer;
-//import org.xhtmlrenderer.resource.XMLResource;
-
-
-
-
-import be.gcroes.thesis.docproc.gae.entity.Job;
 import be.gcroes.thesis.docproc.gae.entity.Task;
 
 import com.google.appengine.api.taskqueue.Queue;
@@ -37,6 +29,9 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+//import org.w3c.dom.Document;
+//import org.xhtmlrenderer.pdf.ITextRenderer;
+//import org.xhtmlrenderer.resource.XMLResource;
 
 //import com.itextpdf.text.Document;
 //import com.itextpdf.text.DocumentException;
