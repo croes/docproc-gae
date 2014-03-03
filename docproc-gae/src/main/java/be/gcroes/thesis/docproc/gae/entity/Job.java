@@ -31,8 +31,8 @@ public class Job {
 	Date endTime;
 
 	String result;
-	
-	Key<Join> join;
+		
+	int nTasks;
 
 	/**
 	 * Empty constructor. All fields will be null.
@@ -57,7 +57,7 @@ public class Job {
 		this.csv = csv;
 		this.startTime = startTime;
 		this.endTime = endTime;
-		this.join = null;
+		this.nTasks = 0;
 	}
 
 	public String getResult() {
@@ -69,7 +69,7 @@ public class Job {
 	}
 
 	public List<Task> getTasks() {
-		return ofy().load().type(Task.class).ancestor(this).list();
+		return ofy().load().type(Task.class).filter("job", this).list();
 	}
 
 	public String getUser() {
@@ -122,7 +122,7 @@ public class Job {
 
 	/**
 	 * Persist the job first before adding tasks!
-	 * 
+	 * Will create a new Task and persist it.
 	 * @return
 	 */
 	public Task newTask() {
@@ -130,10 +130,12 @@ public class Job {
 			throw new IllegalStateException(
 					"Cannot add new task for a job that has not been persisted yet. Persist the job first so it has an id.");
 		}
+		nTasks++;
 		return new Task(this);
 	}
 
 	public Task newTask(HashMap<String, Object> params) {
+		nTasks++;
 		return new Task(this, params);
 	}
 	
@@ -147,11 +149,7 @@ public class Job {
 		return getEndTime().getTime() - getStartTime().getTime();
 	}
 	
-	public Key<Join> getJoin(){
-		return join;
-	}
-	
-	public void setJoin(Key<Join> join){
-		this.join = join;
+	public int getNbOfTasks(){
+		return nTasks;
 	}
 }

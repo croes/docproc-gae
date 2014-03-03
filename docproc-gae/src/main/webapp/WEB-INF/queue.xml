@@ -14,9 +14,9 @@
 	
 	<queue>
 		<name>template-queue</name>
-		<rate>20/s</rate>
-		<bucket-size>40</bucket-size>
-		<max-concurrent-requests>10</max-concurrent-requests>
+		<rate>100/s</rate>
+		<bucket-size>100</bucket-size>
+		<max-concurrent-requests>100</max-concurrent-requests>
 		<retry-parameters>
 			<task-retry-limit>7</task-retry-limit>
 			<min-backoff-seconds>10</min-backoff-seconds>
@@ -27,9 +27,9 @@
 	
 	<queue>
 		<name>render-queue</name>
-		<rate>20/s</rate>
-		<bucket-size>40</bucket-size>
-		<max-concurrent-requests>20</max-concurrent-requests>
+		<rate>100/s</rate>
+		<bucket-size>100</bucket-size>
+		<max-concurrent-requests>100</max-concurrent-requests>
 		<retry-parameters>
 			<task-retry-limit>7</task-retry-limit>
 			<min-backoff-seconds>10</min-backoff-seconds>
@@ -40,9 +40,9 @@
 	
 	<queue>
 		<name>mail-queue</name>
-		<rate>5/s</rate>
+		<rate>100/s</rate>
 		<bucket-size>40</bucket-size>
-		<max-concurrent-requests>1</max-concurrent-requests>
+		<max-concurrent-requests>100</max-concurrent-requests>
 		<retry-parameters>
 			<task-retry-limit>7</task-retry-limit>
 			<min-backoff-seconds>10</min-backoff-seconds>
@@ -53,9 +53,9 @@
 	
 	<queue>
 		<name>zip-queue</name>
-		<rate>5/s</rate>
+		<rate>20/s</rate>
 		<bucket-size>40</bucket-size>
-		<max-concurrent-requests>1</max-concurrent-requests>
+		<max-concurrent-requests>40</max-concurrent-requests>
 		<retry-parameters>
 			<task-retry-limit>7</task-retry-limit>
 			<min-backoff-seconds>10</min-backoff-seconds>

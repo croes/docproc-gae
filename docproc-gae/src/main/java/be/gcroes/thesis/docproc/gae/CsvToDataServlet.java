@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.appengine.api.taskqueue.Queue;
-import com.google.appengine.api.taskqueue.QueueFactory;
-
 import au.com.bytecode.opencsv.CSVReader;
 import be.gcroes.thesis.docproc.gae.entity.Job;
-import be.gcroes.thesis.docproc.gae.entity.Join;
+import be.gcroes.thesis.docproc.gae.entity.ShardedCounter;
 import be.gcroes.thesis.docproc.gae.entity.Task;
+
+import com.google.appengine.api.taskqueue.Queue;
+import com.google.appengine.api.taskqueue.QueueFactory;
 
 
 public class CsvToDataServlet extends HttpServlet{
@@ -33,6 +33,11 @@ public class CsvToDataServlet extends HttpServlet{
 	
 	private static final Logger logger = Logger.getLogger(CsvToDataServlet.class
 			.getCanonicalName());
+	
+	@Override
+	public void init() throws ServletException {
+		ofy();
+	}
 	
 	
 	@Override
@@ -59,16 +64,18 @@ public class CsvToDataServlet extends HttpServlet{
 		reader.close();
 		logger.info("Saved job with " + tasks.size() + " tasks");
 		ofy().save().entities(tasks).now();
-		
-		//create job join
-		List<Long> taskIds = new ArrayList<Long>();
-		for(Task task : tasks){
-			taskIds.add(task.getId());
-		}
-		Join join = new Join(job.getKey(), taskIds);
-		ofy().save().entity(join).now();
-		job.setJoin(join.getKey());
 		ofy().save().entity(job).now();
+//		
+//		//create job join
+//		List<Long> taskIds = new ArrayList<Long>();
+//		for(Task task : tasks){
+//			taskIds.add(task.getId());
+//		}
+//		Join join = new Join(job.getKey(), taskIds);
+//		ofy().save().entity(join).now();
+		
+		ShardedCounter counter = new ShardedCounter("" + job.getId(), 10);
+		ofy().save().entity(counter).now();
 		
 		logger.info("Placing " + tasks.size() + " tasks in template queue");
 		for(Task task : tasks){

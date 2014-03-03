@@ -77,5 +77,17 @@ public class EntityTest {
 		}
 		return keys;
 	}
+	
+	@Test
+	public void testShardCounter(){
+		ShardedCounter counter = new ShardedCounter("job5645645313", 10);
+		ofy().save().entity(counter).now();
+		List<GeneralCounterShard> shards = ofy().load().type(GeneralCounterShard.class).list();
+		assertThat(shards).hasSize(10);
+		for(int i = 0; i < 15; i++){
+			counter.increment();
+		}
+		assertThat(counter.getCount()).isEqualTo(15);
+	}
 
 }

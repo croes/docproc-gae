@@ -7,7 +7,7 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Cache;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Parent;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Serialize;
 
 @Entity
@@ -17,7 +17,7 @@ public class Task {
 	@Id
 	Long id;
 	
-	@Parent
+	@Index
 	Ref<Job> job;
 	
 	@Serialize //cannot be queried, cannot exceed 1 MB
@@ -34,15 +34,15 @@ public class Task {
 		this.template = null;
 	}
 	
-	public Task(Job parent){
-		this.job = Ref.create(parent);
+	public Task(Job job){
+		this.job = Ref.create(job);
 		this.params = new HashMap<String, Object>();
 		this.result = null;
 		this.template = null;
 	}
 	
-	public Task(Job parent, HashMap<String, Object> params){
-		this.job = Ref.create(parent);
+	public Task(Job job, HashMap<String, Object> params){
+		this.job = Ref.create(job);
 		this.params = params;
 		this.result = null;
 		this.template = null;

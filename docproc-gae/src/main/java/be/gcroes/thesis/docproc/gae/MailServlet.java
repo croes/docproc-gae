@@ -21,10 +21,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import be.gcroes.thesis.docproc.gae.entity.Job;
 import be.gcroes.thesis.docproc.gae.entity.Join;
+import be.gcroes.thesis.docproc.gae.entity.ShardedCounter;
 import be.gcroes.thesis.docproc.gae.entity.Task;
 
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
+import com.google.apphosting.api.ApiProxy.OverQuotaException;
 import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Work;
 
@@ -37,6 +39,11 @@ public class MailServlet extends HttpServlet {
 
 	private static final Logger logger = Logger.getLogger(MailServlet.class
 			.getCanonicalName());
+	
+	@Override
+	public void init() throws ServletException {
+		ofy();
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -45,7 +52,7 @@ public class MailServlet extends HttpServlet {
 		final Long taskId = Long.parseLong(req.getParameter("taskId"));
 		Long jobId = Long.parseLong(req.getParameter("jobId"));
 		Key<Job> jobKey = Key.create(Job.class, jobId);
-		Key<Task> taskKey = Key.create(jobKey, Task.class, taskId);
+		Key<Task> taskKey = Key.create(Task.class, taskId);
 		final Job job = ofy().load().key(jobKey).now();
 		Task task = ofy().load().key(taskKey).now();
 
@@ -72,27 +79,22 @@ public class MailServlet extends HttpServlet {
 			e.printStackTrace();
 		} catch (MessagingException e) {
 			e.printStackTrace();
+		} catch(OverQuotaException oqe){
+			logger.info("Mail quota exceeded");
 		}
 		logger.info("Sent mail for task " + taskId);
 
-		Join join = ofy().transact(new Work<Join>() {
-			@Override
-			public Join run() {
-				Join join = ofy().load().key(job.getJoin()).now();
-				join.signal(taskId);
-				ofy().save().entity(join); // async op is completed upon
-											// transact end
-				return join;
-			}
-
-		});
-		if (join.isComplete()) {
+		ShardedCounter counter = ofy().load().key(Key.create(ShardedCounter.class, "" + job.getId())).now();
+		counter.increment();
+		int nTasks = job.getNbOfTasks();
+		int count = counter.getCount();
+		if ( count == nTasks) {
 			logger.info("Placing job " + jobId + " in zip queue");
 			Queue queue = QueueFactory.getQueue("zip-queue");
 			queue.add(withUrl("/zip").param("jobId", "" + jobId));
 
 		}
-		logger.info("Joins remaining: " + join.getCount());
+		logger.info("Joins remaining: " + (nTasks - count) );
 
 	}
 

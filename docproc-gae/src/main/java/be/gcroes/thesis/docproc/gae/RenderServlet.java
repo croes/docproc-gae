@@ -56,21 +56,26 @@ public class RenderServlet extends HttpServlet {
 	 */
 	private static final long serialVersionUID = 3552299743570004114L;
 
-	private final GcsService gcsService = GcsServiceFactory
-			.createGcsService(RetryParams.getDefaultInstance());
+	private GcsService gcsService = null;
 
 	private static final Logger logger = Logger
 			.getLogger(RenderServlet.class.getCanonicalName());
+	
+	@Override
+	public void init() throws ServletException {
+		gcsService = GcsServiceFactory
+				.createGcsService(RetryParams.getDefaultInstance());
+	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		Long taskId = Long.parseLong(req.getParameter("taskId"));
 		Long jobId = Long.parseLong(req.getParameter("jobId"));
-		Key<Job> jobKey = Key.create(Job.class, jobId);
-		Key<Task> taskKey = Key.create(jobKey, Task.class, taskId);
+		Key<Task> taskKey = Key.create(Task.class, taskId);
 		Task task = ofy().load().key(taskKey).now();
 		String currentTemplate = task.getTemplate();
+		System.out.println("render taskid: " + taskId);
 		GcsOutputChannel outputChannel = gcsService.createOrReplace(
 				new GcsFilename("docproc-test.appspot.com", "docproc-" + taskId
 						+ ".pdf"), GcsFileOptions.getDefaultInstance());
@@ -111,7 +116,5 @@ public class RenderServlet extends HttpServlet {
 		} catch (DocumentException e) {
 			e.printStackTrace();
 		}
-
 	}
-
 }

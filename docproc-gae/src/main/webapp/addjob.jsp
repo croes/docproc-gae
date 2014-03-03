@@ -59,7 +59,7 @@
 	<div class="container">
 		<h1>Docproc</h1>
 		<form id="startForm">
-			<label for="templateFile">Template file (XSL-FO, UTF-8,
+			<label for="templateFile">Template file (HTML, UTF-8,
 				reference data variables with ${variable})</label> <input id="templateFile"
 				type="file" class="form-control" />
 			<output class="collapse" id="outTemplate" for="template">
@@ -94,12 +94,6 @@
 				<textarea class="form-control" id="data" rows="10" cols="100"
 					name="data"></textarea>
 			</output>
-			<label for="finishBefore">Finish before (optional)</label> <input
-				id="finishBefore" type="date" class="form-control"
-				placeholder="dd/MM/yyyy" name="finishBefore" /> <label
-				for="startAfter">Start after (optional)</label> <input
-				id="startAfter" type="date" class="form-control"
-				placeholder="dd/MM/yyyy" name="startAfter" />
 			<div style="text-align: center; margin-top: 10px;">
 				<button id="submitbtn" class="btn btn-default btn-lg" type="button">Submit</button>
 			</div>

@@ -35,11 +35,17 @@ public class ZipServlet extends HttpServlet{
 	 */
 	private static final long serialVersionUID = 4972802767453781043L;
 	
-	private final GcsService gcsService = GcsServiceFactory
-			.createGcsService(RetryParams.getDefaultInstance());
+	private GcsService gcsService = null;
 	
 	private static final Logger logger = Logger.getLogger(ZipServlet.class
 			.getCanonicalName());
+	
+	@Override
+	public void init() throws ServletException {
+		ofy();
+		gcsService = GcsServiceFactory
+				.createGcsService(RetryParams.getDefaultInstance());
+	}
 
 	
 	@Override

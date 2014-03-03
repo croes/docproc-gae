@@ -22,6 +22,18 @@
 		<url-pattern>/queuejob</url-pattern>
 	</servlet-mapping>
 	
+	<servlet>
+		<servlet-name>DownloadServlet</servlet-name>
+		<servlet-class>be.gcroes.thesis.docproc.gae.DownloadServlet</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>DownloadServlet</servlet-name>
+		<url-pattern>/download</url-pattern>
+	</servlet-mapping>
+	
+	
+	
 	<!-- Worker servlets -->
 	<servlet>
 		<servlet-name>CsvToDataServlet</servlet-name>
@@ -36,6 +48,7 @@
 	<servlet>
 		<servlet-name>TemplateServlet</servlet-name>
 		<servlet-class>be.gcroes.thesis.docproc.gae.TemplateServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
@@ -46,6 +59,7 @@
 	<servlet>
 		<servlet-name>RenderServlet</servlet-name>
 		<servlet-class>be.gcroes.thesis.docproc.gae.RenderServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
@@ -56,6 +70,7 @@
 	<servlet>
 		<servlet-name>MailServlet</servlet-name>
 		<servlet-class>be.gcroes.thesis.docproc.gae.MailServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>
@@ -66,6 +81,7 @@
 	<servlet>
 		<servlet-name>ZipServlet</servlet-name>
 		<servlet-class>be.gcroes.thesis.docproc.gae.ZipServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
 	</servlet>
 	
 	<servlet-mapping>

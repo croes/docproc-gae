@@ -34,6 +34,10 @@ public class TemplateServlet extends HttpServlet {
 	private static final Logger logger = Logger.getLogger(TemplateServlet.class
 			.getCanonicalName());
 	
+	@Override
+	public void init() throws ServletException {
+		ofy();
+	}
 	
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -41,7 +45,7 @@ public class TemplateServlet extends HttpServlet {
 		Long taskId = Long.parseLong(req.getParameter("taskId"));
 		Long jobId = Long.parseLong(req.getParameter("jobId"));
 		Key<Job> jobKey = Key.create(Job.class, jobId);
-		Key<Task> taskKey = Key.create(jobKey, Task.class, taskId);
+		Key<Task> taskKey = Key.create(Task.class, taskId);
 		Job job = ofy().load().key(jobKey).now();
 		Task task = ofy().load().key(taskKey).now();
 		String template = job.getTemplate();

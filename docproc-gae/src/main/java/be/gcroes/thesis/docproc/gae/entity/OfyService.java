@@ -9,6 +9,8 @@ public class OfyService {
         factory().register(Job.class);
         factory().register(Task.class);
         factory().register(Join.class);
+        factory().register(ShardedCounter.class);
+        factory().register(GeneralCounterShard.class);
     }
 
     public static Objectify ofy() {
