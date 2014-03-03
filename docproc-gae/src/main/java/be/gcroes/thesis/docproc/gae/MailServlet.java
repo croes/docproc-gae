@@ -71,7 +71,7 @@ public class MailServlet extends HttpServlet {
 					email, name));
 			msg.setSubject("Docproc document generated");
 			msg.setText(msgBody);
-			if(!email.equals("glenn@xx.com")){ //don't waste my quota :)
+			if(!email.equals("glenn@xx.org")){ //don't waste my quota :)
 				Transport.send(msg);
 			}
 			logger.info("Sent mail to " + email);
