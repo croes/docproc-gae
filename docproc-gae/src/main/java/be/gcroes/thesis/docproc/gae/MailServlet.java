@@ -65,12 +65,15 @@ public class MailServlet extends HttpServlet {
 			msg.setFrom(new InternetAddress(
 					"delivery@docproc-test.appspotmail.com", "Docproc"));
 			String email = (String) task.getParams().get("email");
+			
 			String name = (String) task.getParams().get("name");
 			msg.addRecipient(Message.RecipientType.TO, new InternetAddress(
 					email, name));
 			msg.setSubject("Docproc document generated");
 			msg.setText(msgBody);
-			Transport.send(msg);
+			if(!email.equals("glenn@xx.com")){ //don't waste my quota :)
+				Transport.send(msg);
+			}
 			logger.info("Sent mail to " + email);
 
 		} catch (AddressException e) {
